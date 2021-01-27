@@ -34,7 +34,7 @@ jobs:
         uses: thebritican/fetch-latest-release@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: echo ${{ steps.fetch-latest-release.outputs }}
+      - run: echo ${{ steps.fetch-latest-release.outputs.upload_url }}
 
       - name: Get latest release version number
         id: get_version
@@ -42,26 +42,26 @@ jobs:
 
       - run: echo ${{ steps.get_version.outputs.version }}
 
-      # - name: Download build
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: my-artifact
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifact
 
-      # - name: Archive build
-      #   uses: thedoctor0/zip-release@master
-      #   with:
-      #     filename: release.zip
-      #     exclusions: '*.git* /*node_modules/*'
+      - name: Archive build
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: release.zip
+          exclusions: '*.git* /*node_modules/*'
 
-      # - name: Upload asset to Github Release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.get_release.outputs.upload_url }}
-      #     asset_path: ./release.zip
-      #     asset_name: release-v${{ steps.get_version.outputs.version }}.zip
-      #     asset_content_type: application/zip
+      - name: Upload asset to Github Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.fetch-latest-release.upload_url }}
+          asset_path: ./release.zip
+          asset_name: release-v${{ steps.get_version.outputs.version }}.zip
+          asset_content_type: application/zip
 
     # name: Release build to Github Releases
     # runs-on: ubuntu-latest
