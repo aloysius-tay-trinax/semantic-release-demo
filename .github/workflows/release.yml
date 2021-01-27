@@ -113,7 +113,6 @@ jobs:
         working-directory: ./phaser
         run: npm run build
       - name: Upload Artifact
-        working-directory: ./phaser
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
