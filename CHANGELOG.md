@@ -1,3 +1,9 @@
+## [0.1.0] - 2020-01-27
+
+### Changed
+
+- Updated workflow
+
 ## [0.0.9] - 2020-01-27
 
 ### Changed
