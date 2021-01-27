@@ -16,6 +16,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Create Release
+        uses: anton-yurchenko/git-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRAFT_RELEASE: 'false'
+          PRE_RELEASE: 'false'
+          CHANGELOG_FILE: 'CHANGELOG.md'
+          ALLOW_EMPTY_CHANGELOG: 'false'
+          ALLOW_TAG_PREFIX: 'false'
+        with:
+          args: |
+            release.zip
+
       - name: Get Release url
         id: fetch-latest-release
         uses: thebritican/fetch-latest-release@main
@@ -23,24 +36,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: echo ${{ steps.fetch-latest-release.outputs }}
 
-      # - name: Create Release
-      #   uses: anton-yurchenko/git-release@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     DRAFT_RELEASE: 'false'
-      #     PRE_RELEASE: 'false'
-      #     CHANGELOG_FILE: 'CHANGELOG.md'
-      #     ALLOW_EMPTY_CHANGELOG: 'false'
-      #     ALLOW_TAG_PREFIX: 'false'
-      # with:
-      #   args: |
-      #     release.zip
+      - name: Get latest release version number
+        id: get_version
+        uses: battila7/get-version-action@v2
 
-      # - name: Get latest release version number
-      #   id: get_version
-      #   uses: battila7/get-version-action@v2
-
-      # - run: echo ${{ steps.get_version.outputs.version }}
+      - run: echo ${{ steps.get_version.outputs.version }}
 
       # - name: Download build
       #   uses: actions/download-artifact@v2
