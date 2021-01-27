@@ -17,50 +17,51 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Get Release url
-        id: get_release
+        id: latest_release_info
         uses: jossef/action-latest-release-info@v1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo ${{ steps.latest_release_info.outputs }}
 
-      - name: Create Release
-        uses: anton-yurchenko/git-release@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRAFT_RELEASE: 'false'
-          PRE_RELEASE: 'false'
-          CHANGELOG_FILE: 'CHANGELOG.md'
-          ALLOW_EMPTY_CHANGELOG: 'false'
-          ALLOW_TAG_PREFIX: 'false'
-        # with:
-        #   args: |
-        #     release.zip
+      # - name: Create Release
+      #   uses: anton-yurchenko/git-release@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     DRAFT_RELEASE: 'false'
+      #     PRE_RELEASE: 'false'
+      #     CHANGELOG_FILE: 'CHANGELOG.md'
+      #     ALLOW_EMPTY_CHANGELOG: 'false'
+      #     ALLOW_TAG_PREFIX: 'false'
+      # with:
+      #   args: |
+      #     release.zip
 
-      - name: Get latest release version number
-        id: get_version
-        uses: battila7/get-version-action@v2
+      # - name: Get latest release version number
+      #   id: get_version
+      #   uses: battila7/get-version-action@v2
 
-      - run: echo ${{ steps.get_version.outputs.version }}
+      # - run: echo ${{ steps.get_version.outputs.version }}
 
-      - name: Download build
-        uses: actions/download-artifact@v2
-        with:
-          name: my-artifact
+      # - name: Download build
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: my-artifact
 
-      - name: Archive build
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: release.zip
-          exclusions: '*.git* /*node_modules/*'
+      # - name: Archive build
+      #   uses: thedoctor0/zip-release@master
+      #   with:
+      #     filename: release.zip
+      #     exclusions: '*.git* /*node_modules/*'
 
-      - name: Upload asset to Github Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ./release.zip
-          asset_name: release-v${{ steps.get_version.outputs.version }}.zip
-          asset_content_type: application/zip
+      # - name: Upload asset to Github Release
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.get_release.outputs.upload_url }}
+      #     asset_path: ./release.zip
+      #     asset_name: release-v${{ steps.get_version.outputs.version }}.zip
+      #     asset_content_type: application/zip
 
     # name: Release build to Github Releases
     # runs-on: ubuntu-latest
